@@ -82,8 +82,11 @@ y = st.number_input("Y 座標を入力 (0 から始まるインデックス)", m
 # 表示用ボタン
 if st.button("セルを開く"):
     if st.session_state.flag[y, x] == 0 and st.session_state.open[y, x] == 0:
-        st.write(f"座標 ({x}, {y}) を開きました！")
-        st.session_state.open[y, x] = 1  # セルを開く
+        if st.session_state.board[y, x] == 0:
+            st.write(f"座標 ({x}, {y}) を開きました！")
+            st.session_state.open[y, x] = 1  # セルを開く
+        else :
+            st.write("ゲームオーバー！")
     else :
         st.write(f"座標 ({x}, {y}) は開けません")
 
