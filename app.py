@@ -84,7 +84,6 @@ if st.button("セルを開く"):
     if st.session_state.flag[y, x] == 0 and st.session_state.open[y, x] == 0:
         st.write(f"座標 ({x}, {y}) を開きました！")
         st.session_state.open[y, x] = 1  # セルを開く
-        plot_board(st.session_state.board, st.session_state.open, st.session_state.flag)
     else :
         st.write(f"座標 ({x}, {y}) は開けません")
 
@@ -92,7 +91,6 @@ if st.button("フラグを立てる"):
     if st.session_state.flag[y, x] == 0 and st.session_state.open[y,x] == 0:
         st.write(f"座標 ({x}, {y}) にフラグを立てました！")
         st.session_state.flag[y, x] = 1  # フラグを立てる
-        plot_board(st.session_state.board, st.session_state.open, st.session_state.flag)
     else :
         st.write(f"座標 ({x}, {y}) にフラグを立てられません")
 
