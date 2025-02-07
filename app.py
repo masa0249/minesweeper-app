@@ -32,7 +32,7 @@ def count_bom(board, x, y, width, height):
 
 
 # 描画する関数
-def plot_board(board, open):
+def plot_board(board, open, flag):
     height, width = board.shape
     fig, ax = plt.subplots(figsize=(width * 0.5, height * 0.5))
     
@@ -42,8 +42,10 @@ def plot_board(board, open):
 
     for y in range(height):
         for x in range(width):
-            if open[y, x] == 0:  # 未開けのセル
+            if open[y, x] == 0 and flag[y, x] == 0:  # 未開けのセル
                 ax.text(x, y, "", ha="center", va="center", color="black", bbox=dict(boxstyle="square", facecolor="gray"))
+            elif flag[y, x] == 1:
+                ax.text(x, y, "?", ha="center", va="center", color="blue")
             elif board[y, x] == 1:  # 地雷
                 ax.text(x, y, "*", ha="center", va="center", color="red")
             else:  # その他のセル
@@ -67,6 +69,7 @@ if "board" not in st.session_state:
     st.session_state.board = generate_minesweeper_board(width, height, mines)
     st.session_state.open = generate_minesweeper_open(width, height)
     st.session_state.flag = generate_minesweeper_flag(width, height)
+    flag = 0
 
 # 入力フォーム
 x = st.number_input("X 座標を入力 (0 から始まるインデックス)", min_value=0, max_value=width-1, value=0)
@@ -85,9 +88,18 @@ if st.button("フラグを立てる"):
     if st.session_state.flag[y, x] == 0 and st.session_state.open[y,x] == 0:
         st.write(f"座標 ({x}, {y}) にフラグを立てました！")
         st.session_state.flag[y, x] = 1  # フラグを立てる
+        flag += 1
         plot_board(st.session_state.board, st.session_state.open)
     else :
         st.write(f"座標 ({x}, {y}) にフラグを立てられません")
+
+# リセットボタン
+if st.button("リセット"):
+    st.session_state.board = generate_minesweeper_board(width, height, mines)
+    st.session_state.open = generate_minesweeper_open(width, height)
+    st.session_state.flag = generate_minesweeper_flag(width, height)
+    flag = 0
+    st.write("盤面をリセットしました！")
 
 # 初期盤面を表示
 plot_board(st.session_state.board, st.session_state.open)
