@@ -38,13 +38,13 @@ def plot_board(board):
 st.title("マインスイーパー")
 st.write("X, Y 座標を入力して盤面を操作してください！")
 
-# ユーザー入力
-width = st.sidebar.slider("横幅", min_value=5, max_value=20, value=10)
-height = st.sidebar.slider("縦幅", min_value=5, max_value=20, value=10)
-mines = st.sidebar.slider("地雷の数", min_value=1, max_value=50, value=10)
 
 # ボード生成
 if "board" not in st.session_state:
+    # ユーザー入力
+    width = st.sidebar.slider("横幅", min_value=5, max_value=20, value=10)
+    height = st.sidebar.slider("縦幅", min_value=5, max_value=20, value=10)
+    mines = st.sidebar.slider("地雷の数", min_value=1, max_value=50, value=10)
     st.session_state.board = generate_minesweeper_board(width, height, mines)
 
 # 入力フォーム
