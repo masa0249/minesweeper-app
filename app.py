@@ -12,7 +12,7 @@ def generate_minesweeper_board(width, height, mines):
 
 # マインスイパーの盤面（空いているかどうかを管理）
 def generate_minesweeper_open(width, height):
-    open = np.full((height, width), -2, dtype=int)
+    open = np.full((height, width), 0, dtype=int)
     return open
 
 # 描画する関数
@@ -29,7 +29,7 @@ def plot_board(board, open):
             if open[y, x] == 0:  # 未開けのセル
                 ax.text(x, y, "", ha="center", va="center", color="black", bbox=dict(boxstyle="square", facecolor="gray"))
             elif board[y, x] == -1:  # 地雷
-                ax.text(x, y, "💣", ha="center", va="center", color="red")
+                ax.text(x, y, "*", ha="center", va="center", color="red")
             else:  # その他のセル
                 ax.text(x, y, str(board[y, x]), ha="center", va="center", color="black")
     ax.set_xticks([])
