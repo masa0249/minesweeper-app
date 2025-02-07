@@ -20,7 +20,7 @@ def count_bom(board, x, y, width, height):
     for i in range(y-1,y+2):
         for j in range(x-1, x+2):
             if i >= 0 and j >= 0 and i < height and j < width:
-                count += board[i][j]
+                count += board[i, j]
                 
     return count
 
