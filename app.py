@@ -70,9 +70,9 @@ if "board" not in st.session_state:
 if "open" not in st.session_state:
     st.session_state.open = generate_minesweeper_open(width, height)
 if "flag" not in st.session_state:
-    total_flags = 0
     st.session_state.flag = generate_minesweeper_flag(width, height)
 
+total_flags = np.sum(st.session_state.flag)
 st.sidebar.write(f"現在のフラグ数: {total_flags}")
 
 # 入力フォーム
@@ -92,7 +92,6 @@ if st.button("フラグを立てる"):
     if st.session_state.flag[y, x] == 0 and st.session_state.open[y,x] == 0:
         st.write(f"座標 ({x}, {y}) にフラグを立てました！")
         st.session_state.flag[y, x] = 1  # フラグを立てる
-        total_flags += 1
         plot_board(st.session_state.board, st.session_state.open, st.session_state.flag)
     else :
         st.write(f"座標 ({x}, {y}) にフラグを立てられません")
@@ -102,7 +101,6 @@ if st.button("リセット"):
     st.session_state.board = generate_minesweeper_board(width, height, mines)
     st.session_state.open = generate_minesweeper_open(width, height)
     st.session_state.flag = generate_minesweeper_flag(width, height)
-    total_flags = 0
     st.write("盤面をリセットしました！")
 
 # 初期盤面を表示
