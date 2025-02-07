@@ -13,12 +13,12 @@ def generate_minesweeper_board(width, height, mines):
 
 # マインスイパーの盤面（空いているかどうかを管理）
 def generate_minesweeper_open(width, height):
-    open = np.full((height, width), 0, dtype=int)
+    open = np.zeros((height, width), dtype=int)
     return open
 
 # マインスイパーの盤面（フラグが立っているかどうかを管理）
 def generate_minesweeper_flag(width, height):
-    flag = np.full((height, width), 0, dtype=int)
+    flag = np.zeros((height, width), dtype=int)
     return flag
 
 def count_bom(board, x, y, width, height):
