@@ -91,6 +91,8 @@ if st.button("フラグを立てる"):
     if st.session_state.flag[y, x] == 0 and st.session_state.open[y,x] == 0:
         st.write(f"座標 ({x}, {y}) にフラグを立てました！")
         st.session_state.flag[y, x] = 1  # フラグを立てる
+    elif st.session_state.flag[y, x] == 1:
+        st.session_state.flag[y, x] = 0  # フラグを折る
     else :
         st.write(f"座標 ({x}, {y}) にフラグを立てられません")
 
