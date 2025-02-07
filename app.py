@@ -1,7 +1,6 @@
 import streamlit as st
 import matplotlib.pyplot as plt
 import numpy as np
-import time
 
 # マインスイーパーの盤面を作成する関数
 def generate_minesweeper_board(width, height, mines):
@@ -121,6 +120,7 @@ if np.sum(st.session_state.open) == width * height - mines and st.session_state.
     game_clear = True
 
 
+# ゲームクリア/オーバー時に全画面に表示
 if game_clear or game_over:
     message = "ゲームオーバー！" if game_over else "ゲームクリア！"
     st.markdown(
@@ -131,10 +131,14 @@ if game_clear or game_over:
                     font-size: 3em; z-index: 9999;">
             {message}
         </div>
+        <script>
+            setTimeout(function() {{
+                var overlay = document.getElementById('overlay');
+                if (overlay) {{
+                    overlay.style.display = 'none';
+                }}
+            }}, 3000);  // 3秒後に非表示
+        </script>
         """,
         unsafe_allow_html=True
     )
-    # 一定時間待機
-    time.sleep(3)
-    # 表示を消す（リロードによる消去）
-    st.experimental_rerun()
