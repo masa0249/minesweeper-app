@@ -121,24 +121,29 @@ if np.sum(st.session_state.open) == width * height - mines and st.session_state.
 
 
 # ゲームクリア/オーバー時に全画面に表示
+if "show_message" not in st.session_state:
+    st.session_state.show_message = True
+
 if game_clear or game_over:
-    message = "ゲームオーバー！" if game_over else "ゲームクリア！"
-    st.markdown(
-        f"""
-        <div id="overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-                    background-color: rgba(0, 0, 0, 0.8); color: white; 
-                    display: flex; align-items: center; justify-content: center; 
-                    font-size: 3em; z-index: 9999;">
-            {message}
-        </div>
-        <script>
-            setTimeout(function() {{
-                var overlay = document.getElementById('overlay');
-                if (overlay) {{
-                    overlay.remove();
-                }}
-            }}, 3000);  // 3秒後に要素を削除
-        </script>
-        """,
-        unsafe_allow_html=True
-    )
+    if st.session_state.show_message:
+        message = "ゲームオーバー！" if game_over else "ゲームクリア！"
+        st.markdown(
+            f"""
+            <div id="overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                        background-color: rgba(0, 0, 0, 0.8); color: white; 
+                        display: flex; align-items: center; justify-content: center; 
+                        font-size: 3em; z-index: 9999;">
+                {message}
+            </div>
+            <script>
+                setTimeout(function() {{
+                    var overlay = document.getElementById('overlay');
+                    if (overlay) {{
+                        overlay.remove();
+                    }}
+                }}, 3000);
+            </script>
+            """,
+            unsafe_allow_html=True
+        )
+        st.session_state.show_message = False  # メッセージを一度だけ表示
