@@ -7,13 +7,23 @@ def generate_minesweeper_board(width, height, mines):
     board = np.zeros((height, width), dtype=int)
     for _ in range(mines):
         x, y = np.random.randint(0, width), np.random.randint(0, height)
-        board[y, x] = -1  # 地雷を -1 として配置
+        board[y, x] = 1  # 地雷を 1 として配置
     return board
 
 # マインスイパーの盤面（空いているかどうかを管理）
 def generate_minesweeper_open(width, height):
     open = np.full((height, width), 0, dtype=int)
     return open
+
+def count_bom(board, x, y, width, height):
+    count = 0
+    for i in range(y-1,y+2):
+        for j in range(x-1, x+2):
+            if i >= 0 and j >= 0 and i < height and j < width:
+                count += board[i][j]
+                
+    return count
+
 
 # 描画する関数
 def plot_board(board, open):
@@ -28,10 +38,11 @@ def plot_board(board, open):
         for x in range(width):
             if open[y, x] == 0:  # 未開けのセル
                 ax.text(x, y, "", ha="center", va="center", color="black", bbox=dict(boxstyle="square", facecolor="gray"))
-            elif board[y, x] == -1:  # 地雷
+            elif board[y, x] == 1:  # 地雷
                 ax.text(x, y, "*", ha="center", va="center", color="red")
             else:  # その他のセル
-                ax.text(x, y, str(board[y, x]), ha="center", va="center", color="black")
+                count = count_bom(board, x, y, width, height)
+                ax.text(x, y, str(count), ha="center", va="center", color="black")
     ax.set_xticks([])
     ax.set_yticks([])
     st.pyplot(fig)
