@@ -135,9 +135,9 @@ if game_clear or game_over:
             setTimeout(function() {{
                 var overlay = document.getElementById('overlay');
                 if (overlay) {{
-                    overlay.style.display = 'none';
+                    overlay.remove();
                 }}
-            }}, 3000);  // 3秒後に非表示
+            }}, 3000);  // 3秒後に要素を削除
         </script>
         """,
         unsafe_allow_html=True
