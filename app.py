@@ -92,7 +92,7 @@ if st.button("セルを開く"):
         else :
             st.session_state.open[y, x] = 1
             st.write("ゲームオーバー！")
-            game_over = False
+            game_over = True
     else :
         st.write(f"座標 ({x}, {y}) は開けません")
 
@@ -118,7 +118,7 @@ plot_board(st.session_state.board, st.session_state.open, st.session_state.flag)
 
 if np.sum(st.session_state.open) == width * height - mines and st.session_state.board[y, x] == 0:
     st.write("ゲームクリア！")  
-    game_clear = False
+    game_clear = True
 
 if game_clear or game_over:
     message = "ゲームオーバー！" if game_over else "ゲームクリア！"
