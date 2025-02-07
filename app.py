@@ -59,6 +59,10 @@ def plot_board(board, open, flag):
 st.title("マインスイーパー")
 st.write("X, Y 座標を入力して盤面を操作してください！")
 
+# ゲームの状態
+game_over = False
+game_clear = False
+
 # ユーザー入力
 width = st.sidebar.slider("横幅", min_value=5, max_value=20, value=10)
 height = st.sidebar.slider("縦幅", min_value=5, max_value=20, value=10)
@@ -88,6 +92,7 @@ if st.button("セルを開く"):
         else :
             st.session_state.open[y, x] = 1
             st.write("ゲームオーバー！")
+            game_over = False
     else :
         st.write(f"座標 ({x}, {y}) は開けません")
 
@@ -112,4 +117,19 @@ if st.button("リセット"):
 plot_board(st.session_state.board, st.session_state.open, st.session_state.flag)
 
 if np.sum(st.session_state.open) == width * height - mines and st.session_state.board[y, x] == 0:
-    st.write("ゲームクリア！")
+    st.write("ゲームクリア！")  
+    game_clear = False
+
+if game_clear or game_over:
+    message = "ゲームオーバー！" if game_over else "ゲームクリア！"
+    st.markdown(
+        f"""
+        <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                    background-color: rgba(0, 0, 0, 0.8); color: white; 
+                    display: flex; align-items: center; justify-content: center; 
+                    font-size: 3em; z-index: 9999;">
+            {message}
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
