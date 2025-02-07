@@ -86,6 +86,7 @@ if st.button("セルを開く"):
             st.write(f"座標 ({x}, {y}) を開きました！")
             st.session_state.open[y, x] = 1  # セルを開く
         else :
+            st.session_state.open[y, x] = 1
             st.write("ゲームオーバー！")
     else :
         st.write(f"座標 ({x}, {y}) は開けません")
@@ -96,6 +97,7 @@ if st.button("フラグを立てる"):
         st.session_state.flag[y, x] = 1  # フラグを立てる
     elif st.session_state.flag[y, x] == 1:
         st.session_state.flag[y, x] = 0  # フラグを折る
+        st.write(f"座標 ({x}, {y}) を折りました！")
     else :
         st.write(f"座標 ({x}, {y}) にフラグを立てられません")
 
@@ -108,3 +110,6 @@ if st.button("リセット"):
 
 # 初期盤面を表示
 plot_board(st.session_state.board, st.session_state.open, st.session_state.flag)
+
+if np.sum(st.session_state.open) == width * height - mines and st.session_state.board[y, x] == 0:
+    st.write("ゲームクリア！")
