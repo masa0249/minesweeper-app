@@ -67,9 +67,13 @@ mines = st.sidebar.slider("地雷の数", min_value=1, max_value=50, value=10)
 # ボード生成
 if "board" not in st.session_state:
     st.session_state.board = generate_minesweeper_board(width, height, mines)
+if "open" not in st.session_state:
     st.session_state.open = generate_minesweeper_open(width, height)
-    st.session_state.flag = generate_minesweeper_flag(width, height)
+if "flag" not in st.session_state:
     f = 0
+    st.session_state.flag = generate_minesweeper_flag(width, height)
+
+st.sidebar.write(f"現在のフラグ数: {f}")
 
 # 入力フォーム
 x = st.number_input("X 座標を入力 (0 から始まるインデックス)", min_value=0, max_value=width-1, value=0)
