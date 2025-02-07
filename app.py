@@ -59,7 +59,7 @@ if st.button("セルを開く"):
     st.write(f"座標 ({x}, {y}) を選択しました！")
     if st.session_state.open[y, x] == 0:  # 未開けの場合のみ更新
         st.session_state.open[y, x] = 1  # セルを開く（デモ用に 0 を設定）
-    plot_board(st.session_state.board, st.session_state.ope)
+    plot_board(st.session_state.board, st.session_state.open)
 
 # 初期盤面を表示
 plot_board(st.session_state.board, st.session_state.open)
