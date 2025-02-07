@@ -52,7 +52,7 @@ x = st.number_input("X 座標を入力 (0 から始まるインデックス)", m
 y = st.number_input("Y 座標を入力 (0 から始まるインデックス)", min_value=0, max_value=height-1, value=0)
 
 # 表示用ボタン
-if st.button("セルを開く"):
+if st.button("セルを押す"):
     st.write(f"座標 ({x}, {y}) を選択しました！")
     if st.session_state.board[y, x] == -2:  # 未開けの場合のみ更新
         st.session_state.board[y, x] = 0  # セルを開く（デモ用に 0 を設定）
