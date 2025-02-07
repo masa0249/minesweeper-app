@@ -43,11 +43,11 @@ def plot_board(board, open, flag):
         for x in range(width):
             if open[y, x] == 0 and flag[y, x] == 0:  # 未開けのセル
                 ax.text(x, y, "", ha="center", va="center", color="black", bbox=dict(boxstyle="square", facecolor="gray"))
-            elif flag[y, x] == 1:
+            elif flag[y, x] == 1: # フラグ
                 ax.text(x, y, "?", ha="center", va="center", color="blue")
             elif board[y, x] == 1:  # 地雷
                 ax.text(x, y, "*", ha="center", va="center", color="red")
-            else:  # その他のセル
+            else:  # 数字表示
                 count = count_bom(board, x, y, width, height)
                 ax.text(x, y, str(count), ha="center", va="center", color="black")
     ax.set_xticks([])
@@ -89,8 +89,8 @@ if st.button("セルを開く"):
             st.write(f"座標 ({x}, {y}) を開きました！")
             st.session_state.open[y, x] = 1  # セルを開く
         else :
+            st.write("ゲームオーバー！") 
             st.session_state.open[y, x] = 1
-            st.write("ゲームオーバー！")
             game_over = True
     else :
         st.write(f"座標 ({x}, {y}) は開けません")
@@ -121,29 +121,24 @@ if np.sum(st.session_state.open) == width * height - mines and st.session_state.
 
 
 # ゲームクリア/オーバー時に全画面に表示
-if "show_message" not in st.session_state:
-    st.session_state.show_message = True
-
 if game_clear or game_over:
-    if st.session_state.show_message:
-        message = "ゲームオーバー！" if game_over else "ゲームクリア！"
-        st.markdown(
-            f"""
-            <div id="overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-                        background-color: rgba(0, 0, 0, 0.8); color: white; 
-                        display: flex; align-items: center; justify-content: center; 
-                        font-size: 3em; z-index: 9999;">
-                {message}
-            </div>
-            <script>
-                setTimeout(function() {{
-                    var overlay = document.getElementById('overlay');
-                    if (overlay) {{
-                        overlay.remove();
-                    }}
-                }}, 3000);
-            </script>
-            """,
-            unsafe_allow_html=True
-        )
-        st.session_state.show_message = False  # メッセージを一度だけ表示
+    message = "ゲームオーバー！" if game_over else "ゲームクリア！"
+    st.markdown(
+        f"""
+        <div id="overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                    background-color: rgba(0, 0, 0, 0.8); color: white; 
+                    display: flex; align-items: center; justify-content: center; 
+                    font-size: 3em; z-index: 9999;">
+            {message}
+        </div>
+        <script>
+            setTimeout(function() {{
+                var overlay = document.getElementById('overlay');
+                if (overlay) {{
+                    overlay.remove();
+                }}
+            }}, 3000); 
+        </script>
+        """,
+        unsafe_allow_html=True
+    )
