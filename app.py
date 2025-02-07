@@ -1,6 +1,7 @@
 import streamlit as st
 import matplotlib.pyplot as plt
 import numpy as np
+import random
 
 # マインスイーパーの盤面を作成する関数
 def generate_minesweeper_board(width, height, mines):
@@ -15,9 +16,14 @@ def generate_minesweeper_open(width, height):
     open = np.full((height, width), 0, dtype=int)
     return open
 
+# マインスイパーの盤面（フラグが立っているかどうかを管理）
+def generate_minesweeper_flag(width, height):
+    flag = np.full((height, width), 0, dtype=int)
+    return flag
+
 def count_bom(board, x, y, width, height):
     count = 0
-    for i in range(y-1,y+2):
+    for i in range(y-1, y+2):
         for j in range(x-1, x+2):
             if i >= 0 and j >= 0 and i < height and j < width:
                 count += board[i, j]
@@ -60,6 +66,7 @@ mines = st.sidebar.slider("地雷の数", min_value=1, max_value=50, value=10)
 if "board" not in st.session_state:
     st.session_state.board = generate_minesweeper_board(width, height, mines)
     st.session_state.open = generate_minesweeper_open(width, height)
+    st.session_state.flag = generate_minesweeper_flag(width, height)
 
 # 入力フォーム
 x = st.number_input("X 座標を入力 (0 から始まるインデックス)", min_value=0, max_value=width-1, value=0)
@@ -67,10 +74,20 @@ y = st.number_input("Y 座標を入力 (0 から始まるインデックス)", m
 
 # 表示用ボタン
 if st.button("セルを開く"):
-    st.write(f"座標 ({x}, {y}) を選択しました！")
-    if st.session_state.open[y, x] == 0:  # 未開けの場合のみ更新
-        st.session_state.open[y, x] = 1  # セルを開く（デモ用に 0 を設定）
-    plot_board(st.session_state.board, st.session_state.open)
+    if st.session_state.flag == 0 and st.session_state.open == 0:
+        st.write(f"座標 ({x}, {y}) を開きました！")
+        st.session_state.open[y, x] = 1  # セルを開く
+        plot_board(st.session_state.board, st.session_state.open)
+    else :
+        st.write(f"座標 ({x}, {y}) は開けません")
+
+if st.button("フラグを立てる"):
+    if st.session_state.flag == 0 and st.session_state.open == 0:
+        st.write(f"座標 ({x}, {y}) にフラグを立てました！")
+        st.session_state.flag[y, x] = 1  # フラグを立てる
+        plot_board(st.session_state.board, st.session_state.open)
+    else :
+        st.write(f"座標 ({x}, {y}) にフラグを立てられません")
 
 # 初期盤面を表示
 plot_board(st.session_state.board, st.session_state.open)
