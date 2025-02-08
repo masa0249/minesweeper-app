@@ -18,7 +18,7 @@ def zero_open(open, board, x, y, width, height):
             if i >= 0 and j >= 0 and i < height and j < width and open[i, j] == 0:
                 open[i, j] = 1
                 if board[i, j] == 0:
-                    open = zero_open(open, board, x, y, width, height)
+                    open = zero_open(open, board, j, i, width, height)
 
     return open
 
