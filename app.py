@@ -117,6 +117,17 @@ st.sidebar.write(f"経過時間: {int(elapsed_time)} 秒")
 total_flags = np.sum(st.session_state.flag)
 st.sidebar.write(f"現在のフラグ数: {total_flags}")
 
+# リセットボタン
+if st.button("リセット"):
+    st.session_state.bom = generate_minesweeper_bom(width, height, mines)
+    st.session_state.board = generate_minesweeper_board(width, height, st.session_state.bom)
+    st.session_state.open = generate_minesweeper_open(width, height)
+    st.session_state.flag = generate_minesweeper_flag(width, height)
+    st.session_state.start_time = time.time()
+    st.session_state.game_over = False
+    st.session_state.game_clear = False
+    st.write("盤面をリセットしました！")
+
 # 入力フォーム
 x_input = st.number_input("X 座標を入力", min_value=1, max_value=width, value=1)
 y_input = st.number_input("Y 座標を入力", min_value=1, max_value=height, value=1)
@@ -148,16 +159,6 @@ if st.button("フラグを立てる"):
     else :
         st.write(f"座標 ({x_input}, {y_input}) にフラグを立てられません")
 
-# リセットボタン
-if st.button("リセット"):
-    st.session_state.bom = generate_minesweeper_bom(width, height, mines)
-    st.session_state.board = generate_minesweeper_board(width, height, st.session_state.bom)
-    st.session_state.open = generate_minesweeper_open(width, height)
-    st.session_state.flag = generate_minesweeper_flag(width, height)
-    st.session_state.start_time = time.time()
-    st.session_state.game_over = False
-    st.session_state.game_clear = False
-    st.write("盤面をリセットしました！")
 
 # 初期盤面を表示
 plot_board(st.session_state.board, st.session_state.bom, st.session_state.open, st.session_state.flag)
