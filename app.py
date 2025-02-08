@@ -24,6 +24,8 @@ def zero_open(open, board, x, y, width, height):
 
 # マインスイーパーの盤面（爆弾を管理）
 def generate_minesweeper_bom(width, height, mines):
+    max_mines = width * height
+    mines = min(mines, max_mines)
     bom = np.zeros((height, width), dtype=int)
     for _ in range(mines):
         x, y = np.random.randint(0, width), np.random.randint(0, height)
@@ -46,7 +48,7 @@ def generate_minesweeper_open(width, height):
     open = np.zeros((height, width), dtype=int)
     return open
 
-# マインスイパーの盤面（フラグを管理）
+# マインスイパーの盤面（フラッグを管理）
 def generate_minesweeper_flag(width, height):
     flag = np.zeros((height, width), dtype=int)
     return flag
@@ -64,7 +66,7 @@ def plot_board(board, bom, open, flag):
         for x in range(width):
             if open[y, x] == 0 and flag[y, x] == 0:  # 未開けのセル
                 ax.text(x, y, "", ha="center", va="center", color="black", bbox=dict(boxstyle="square", facecolor="gray"))
-            elif flag[y, x] == 1: # フラグ
+            elif flag[y, x] == 1: # フラッグ
                 ax.text(x, y, "?", ha="center", va="center", color="blue")
             elif bom[y, x] == 1:  # 地雷
                 ax.text(x, y, "*", ha="center", va="center", color="red")
@@ -94,7 +96,9 @@ def plot_board(board, bom, open, flag):
 
 # インターフェース
 st.title("マインスイーパー")
-st.write("X, Y 座標を入力して盤面を操作してください！")
+st.write("X, Y 座標を入力してボタンを押してください！")
+st.write("「マスを開く」ボタンを押すと指定したマスが開きます")
+st.write("「フラッグを立てる」ボタンを押すと指定したマスのフラッグを立てる（折る）ことができます")
 
 # ゲームの状態
 if "start_time" not in st.session_state:
@@ -123,9 +127,9 @@ if "flag" not in st.session_state:
 elapsed_time = time.time() - st.session_state.start_time
 st.sidebar.write(f"経過時間: {int(elapsed_time)} 秒")
 
-# フラグの合計
+# フラッグの合計
 total_flags = np.sum(st.session_state.flag)
-st.sidebar.write(f"現在のフラグ数: {total_flags}")
+st.sidebar.write(f"現在のフラッグ数: {total_flags}")
 
 # 入力フォーム
 x_input = st.number_input("X 座標を入力", min_value=1, max_value=width, value=1)
@@ -134,11 +138,11 @@ x = x_input - 1
 y = y_input - 1
 
 # 表示ボタン
-if st.button("セルを開く"):
+if st.button("マスを開く"):
     if st.session_state.flag[y, x] == 0 and st.session_state.open[y, x] == 0:
         if st.session_state.bom[y, x] == 0:
             st.write(f"座標 ({x_input}, {y_input}) を開きました！")
-            st.session_state.open[y, x] = 1  # セルを開く
+            st.session_state.open[y, x] = 1  
             
             if st.session_state.board[y, x] == 0:
                 st.session_state.open = zero_open(st.session_state.open, st.session_state.board, x, y, width, height)
@@ -150,16 +154,16 @@ if st.button("セルを開く"):
     else :
         st.write(f"座標 ({x_input}, {y_input}) は開けません")
 
-# フラグボタン
-if st.button("フラグを立てる"):
+# フラッグボタン
+if st.button("フラッグを立てる"):
     if st.session_state.flag[y, x] == 0 and st.session_state.open[y,x] == 0:
-        st.write(f"座標 ({x_input}, {y_input}) にフラグを立てました！")
-        st.session_state.flag[y, x] = 1  # フラグを立てる
+        st.write(f"座標 ({x_input}, {y_input}) にフラッグを立てました！")
+        st.session_state.flag[y, x] = 1  
     elif st.session_state.flag[y, x] == 1:
-        st.session_state.flag[y, x] = 0  # フラグを折る
-        st.write(f"座標 ({x_input}, {y_input}) を折りました！")
+        st.session_state.flag[y, x] = 0  
+        st.write(f"座標 ({x_input}, {y_input}) のフラッグを折りました！")
     else :
-        st.write(f"座標 ({x_input}, {y_input}) にフラグを立てられません")
+        st.write(f"座標 ({x_input}, {y_input}) にフラッグを立てられません")
 
 # リセットボタン
 if st.button("リセット"):
