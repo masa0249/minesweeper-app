@@ -55,6 +55,15 @@ def plot_board(board, open, flag):
     ax.grid(which="minor", color="black", linestyle='-', linewidth=0.5)
     ax.tick_params(which="minor", size=0)
 
+    # X, Y軸のラベルを追加
+    ax.set_xticks(np.arange(0, width, 1))
+    ax.set_yticks(np.arange(0, height, 1))
+    ax.set_xticklabels(np.arange(0, width, 1), fontsize=8)
+    ax.set_yticklabels(np.arange(0, height, 1), fontsize=8)
+    
+    ax.xaxis.set_ticks_position('top')
+    ax.tick_params(axis="x", rotation=90) 
+
     ax.set_xticks([])
     ax.set_yticks([])
     st.pyplot(fig)
@@ -141,7 +150,7 @@ if np.sum(st.session_state.open) == width * height - mines and not st.session_st
 
 # ゲームクリア/オーバー時に全画面に表示
 if st.session_state.game_clear or st.session_state.game_over:
-    message = "ゲームオーバー！" if st.session_state.game_over else f"ゲームクリア！タイム: {int(st.session_state.clear_time)} 秒"
+    message = "ゲームオーバー！" if st.session_state.game_over else f"ゲームクリア！ タイム: {int(st.session_state.clear_time)} 秒"
     if st.button("メッセージを消す"):
         st.session_state.game_over = False
         st.session_state.game_clear = False
