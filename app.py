@@ -113,25 +113,25 @@ y = y_input - 1
 if st.button("セルを開く"):
     if st.session_state.flag[y, x] == 0 and st.session_state.open[y, x] == 0:
         if st.session_state.board[y, x] == 0:
-            st.write(f"座標 ({x}, {y}) を開きました！")
+            st.write(f"座標 ({x_input}, {y_input}) を開きました！")
             st.session_state.open[y, x] = 1  # セルを開く
         else :
             st.write("ゲームオーバー！") 
             st.session_state.open[y, x] = 1
             st.session_state.game_over = True
     else :
-        st.write(f"座標 ({x}, {y}) は開けません")
+        st.write(f"座標 ({x_input}, {y_input}) は開けません")
 
 # フラグボタン
 if st.button("フラグを立てる"):
     if st.session_state.flag[y, x] == 0 and st.session_state.open[y,x] == 0:
-        st.write(f"座標 ({x}, {y}) にフラグを立てました！")
+        st.write(f"座標 ({x_input}, {y_input}) にフラグを立てました！")
         st.session_state.flag[y, x] = 1  # フラグを立てる
     elif st.session_state.flag[y, x] == 1:
         st.session_state.flag[y, x] = 0  # フラグを折る
-        st.write(f"座標 ({x}, {y}) を折りました！")
+        st.write(f"座標 ({x_input}, {y_input}) を折りました！")
     else :
-        st.write(f"座標 ({x}, {y}) にフラグを立てられません")
+        st.write(f"座標 ({x_input}, {y_input}) にフラグを立てられません")
 
 # リセットボタン
 if st.button("リセット"):
