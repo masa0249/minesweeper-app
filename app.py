@@ -3,6 +3,15 @@ import matplotlib.pyplot as plt
 import numpy as np
 import time
 
+# 爆弾の数をカウント
+def count_bom(bom, x, y, width, height):
+    count = 0
+    for i in range(y-1, y+2):
+        for j in range(x-1, x+2):
+            if i >= 0 and j >= 0 and i < height and j < width:
+                count += bom[i, j]        
+    return count
+
 # マインスイーパーの盤面（爆弾を管理）
 def generate_minesweeper_bom(width, height, mines):
     bom = np.zeros((height, width), dtype=int)
@@ -10,6 +19,17 @@ def generate_minesweeper_bom(width, height, mines):
         x, y = np.random.randint(0, width), np.random.randint(0, height)
         bom[y, x] = 1  # 地雷を 1 として配置
     return bom
+
+# マインスイーパーの盤面（数字を管理）
+def generate_minesweeper_board(width, height, bom):
+    board = np.zeros((height, width), dtype=int)
+    for y in range(height):
+        for x in range(width):
+            if bom[y, x] == 0:
+                board[y, x] = count_bom(bom, x, y, width, height)
+            else :
+                board[y, x] = -1
+    return board
 
 # マインスイパーの盤面（空きマスを管理）
 def generate_minesweeper_open(width, height):
@@ -21,17 +41,9 @@ def generate_minesweeper_flag(width, height):
     flag = np.zeros((height, width), dtype=int)
     return flag
 
-def count_bom(bom, x, y, width, height):
-    count = 0
-    for i in range(y-1, y+2):
-        for j in range(x-1, x+2):
-            if i >= 0 and j >= 0 and i < height and j < width:
-                count += bom[i, j]        
-    return count
-
 
 # 描画する関数
-def plot_board(bom, open, flag):
+def plot_board(board, bom, open, flag):
     height, width = bom.shape
     fig, ax = plt.subplots(figsize=(width * 0.5, height * 0.5))
     
@@ -47,8 +59,7 @@ def plot_board(bom, open, flag):
             elif bom[y, x] == 1:  # 地雷
                 ax.text(x, y, "*", ha="center", va="center", color="red")
             else:  # 数字表示
-                count = count_bom(bom, x, y, width, height)
-                ax.text(x, y, str(count), ha="center", va="center", color="black")
+                ax.text(x, y, str(board[y, x]), ha="center", va="center", color="black")
 
     # 軸ラベルを表示
     ax.set_xticks(np.arange(0, width)) 
@@ -70,6 +81,7 @@ def plot_board(bom, open, flag):
 
     st.pyplot(fig)
 
+
 # インターフェース
 st.title("マインスイーパー")
 st.write("X, Y 座標を入力して盤面を操作してください！")
@@ -90,6 +102,8 @@ mines = st.sidebar.slider("地雷の数", min_value=1, max_value=50, value=10)
 # ボード生成
 if "bom" not in st.session_state:
     st.session_state.bom = generate_minesweeper_bom(width, height, mines)
+if "board" not in st.session_state:
+    st.session_state.board = generate_minesweeper_board(width, height, st.session_state.bom)
 if "open" not in st.session_state:
     st.session_state.open = generate_minesweeper_open(width, height)
 if "flag" not in st.session_state:
@@ -137,6 +151,7 @@ if st.button("フラグを立てる"):
 # リセットボタン
 if st.button("リセット"):
     st.session_state.bom = generate_minesweeper_bom(width, height, mines)
+    st.session_state.board = generate_minesweeper_board(width, height, st.session_state.bom)
     st.session_state.open = generate_minesweeper_open(width, height)
     st.session_state.flag = generate_minesweeper_flag(width, height)
     st.session_state.start_time = time.time()
@@ -145,7 +160,7 @@ if st.button("リセット"):
     st.write("盤面をリセットしました！")
 
 # 初期盤面を表示
-plot_board(st.session_state.bom, st.session_state.open, st.session_state.flag)
+plot_board(st.session_state.board, st.session_state.bom, st.session_state.open, st.session_state.flag)
 
 # ゲームクリア判定
 if np.sum(st.session_state.open) == width * height - mines and not st.session_state.game_over:
