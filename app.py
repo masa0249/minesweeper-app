@@ -50,22 +50,22 @@ def plot_board(board, open, flag):
                 count = count_bom(board, x, y, width, height)
                 ax.text(x, y, str(count), ha="center", va="center", color="black")
 
+    # 軸ラベルを表示
+    ax.set_xticks(np.arange(0, width))  # X軸ラベル位置
+    ax.set_yticks(np.arange(0, height))  # Y軸ラベル位置
+    ax.set_xticklabels(np.arange(0, width), fontsize=8)  # X軸ラベル
+    ax.set_yticklabels(np.arange(0, height), fontsize=8)  # Y軸ラベル
+
+    # 軸の位置とスタイルを調整
+    ax.xaxis.set_ticks_position('top')  # X軸ラベルを上に移動
+    ax.tick_params(axis="x", rotation=90)  # X軸ラベルを90度回転
+
+    # マス目のグリッドを追加
     ax.set_xticks(np.arange(-0.5, width, 1), minor=True)
     ax.set_yticks(np.arange(-0.5, height, 1), minor=True)
     ax.grid(which="minor", color="black", linestyle='-', linewidth=0.5)
     ax.tick_params(which="minor", size=0)
 
-    # X, Y軸のラベルを追加
-    ax.set_xticks(np.arange(0, width, 1))
-    ax.set_yticks(np.arange(0, height, 1))
-    ax.set_xticklabels(np.arange(0, width, 1), fontsize=8)
-    ax.set_yticklabels(np.arange(0, height, 1), fontsize=8)
-    
-    ax.xaxis.set_ticks_position('top')
-    ax.tick_params(axis="x", rotation=90) 
-
-    ax.set_xticks([])
-    ax.set_yticks([])
     st.pyplot(fig)
 
 # インターフェース
