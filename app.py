@@ -104,8 +104,8 @@ total_flags = np.sum(st.session_state.flag)
 st.sidebar.write(f"現在のフラグ数: {total_flags}")
 
 # 入力フォーム
-x = st.number_input("X 座標を入力", min_value=0, max_value=width-1, value=0)
-y = st.number_input("Y 座標を入力", min_value=0, max_value=height-1, value=0)
+x = st.number_input("X 座標を入力", min_value=1, max_value=width, value=0)
+y = st.number_input("Y 座標を入力", min_value=1, max_value=height, value=0)
 x -= 1
 y -= 1
 
