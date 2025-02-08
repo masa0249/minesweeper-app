@@ -53,8 +53,8 @@ def plot_board(board, open, flag):
     # 軸ラベルを表示
     ax.set_xticks(np.arange(0, width)) 
     ax.set_yticks(np.arange(0, height))  
-    ax.set_xticklabels(np.arange(0, width), fontsize=8) 
-    ax.set_yticklabels(np.arange(0, height), fontsize=8)  
+    ax.set_xticklabels(np.arange(1, width+1), fontsize=8) 
+    ax.set_yticklabels(np.arange(1, height+1), fontsize=8)  
 
     # 軸の位置とスタイルを調整
     ax.xaxis.set_ticks_position('top')  
@@ -104,8 +104,10 @@ total_flags = np.sum(st.session_state.flag)
 st.sidebar.write(f"現在のフラグ数: {total_flags}")
 
 # 入力フォーム
-x = st.number_input("X 座標を入力 (0 から始まるインデックス)", min_value=0, max_value=width-1, value=0)
-y = st.number_input("Y 座標を入力 (0 から始まるインデックス)", min_value=0, max_value=height-1, value=0)
+x = st.number_input("X 座標を入力", min_value=0, max_value=width-1, value=0)
+y = st.number_input("Y 座標を入力", min_value=0, max_value=height-1, value=0)
+x -= 1
+y -= 1
 
 # 表示ボタン
 if st.button("セルを開く"):
