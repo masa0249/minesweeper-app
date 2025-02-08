@@ -12,6 +12,16 @@ def count_bom(bom, x, y, width, height):
                 count += bom[i, j]        
     return count
 
+def zero_open(open, board, x, y, width, height):
+    for i in range(y-1, y+2):
+        for j in range(x-1, x+2):
+            if i >= 0 and j >= 0 and i < height and j < width and open[i, j] == 0:
+                open[i, j] = 1
+                if board[i, j] == 0:
+                    open = zero_open(open, board, x, y, width, height)
+
+    return open
+
 # マインスイーパーの盤面（爆弾を管理）
 def generate_minesweeper_bom(width, height, mines):
     bom = np.zeros((height, width), dtype=int)
@@ -117,17 +127,6 @@ st.sidebar.write(f"経過時間: {int(elapsed_time)} 秒")
 total_flags = np.sum(st.session_state.flag)
 st.sidebar.write(f"現在のフラグ数: {total_flags}")
 
-# リセットボタン
-if st.button("リセット"):
-    st.session_state.bom = generate_minesweeper_bom(width, height, mines)
-    st.session_state.board = generate_minesweeper_board(width, height, st.session_state.bom)
-    st.session_state.open = generate_minesweeper_open(width, height)
-    st.session_state.flag = generate_minesweeper_flag(width, height)
-    st.session_state.start_time = time.time()
-    st.session_state.game_over = False
-    st.session_state.game_clear = False
-    st.write("盤面をリセットしました！")
-
 # 入力フォーム
 x_input = st.number_input("X 座標を入力", min_value=1, max_value=width, value=1)
 y_input = st.number_input("Y 座標を入力", min_value=1, max_value=height, value=1)
@@ -140,6 +139,9 @@ if st.button("セルを開く"):
         if st.session_state.bom[y, x] == 0:
             st.write(f"座標 ({x_input}, {y_input}) を開きました！")
             st.session_state.open[y, x] = 1  # セルを開く
+            
+            if st.session_state.board[y, x] == 0:
+                st.session_state.open = zero_open(st.session_state.open, st.session_state.board, x, y, width, height)
 
         else :
             st.write("ゲームオーバー！") 
@@ -159,6 +161,16 @@ if st.button("フラグを立てる"):
     else :
         st.write(f"座標 ({x_input}, {y_input}) にフラグを立てられません")
 
+# リセットボタン
+if st.button("リセット"):
+    st.session_state.bom = generate_minesweeper_bom(width, height, mines)
+    st.session_state.board = generate_minesweeper_board(width, height, st.session_state.bom)
+    st.session_state.open = generate_minesweeper_open(width, height)
+    st.session_state.flag = generate_minesweeper_flag(width, height)
+    st.session_state.start_time = time.time()
+    st.session_state.game_over = False
+    st.session_state.game_clear = False
+    st.write("盤面をリセットしました！")
 
 # 初期盤面を表示
 plot_board(st.session_state.board, st.session_state.bom, st.session_state.open, st.session_state.flag)
